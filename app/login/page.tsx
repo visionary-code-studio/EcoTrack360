@@ -69,6 +69,8 @@ export default function LoginPage() {
         setError('Invalid email or password.');
       } else if (err.code === 'auth/weak-password') {
         setError('Password should be at least 6 characters.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('This domain is not whitelisted in Firebase Auth. Please use the "Continue in Demo Mode" button below to log in.');
       } else {
         setError(err.message || 'Authentication failed. Please try again.');
       }
@@ -100,7 +102,9 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (err: any) {
       console.error(err);
-      if (err.code !== 'auth/popup-closed-by-user') {
+      if (err.code === 'auth/unauthorized-domain') {
+        setError('This domain is not whitelisted in Firebase Auth. Please use the "Continue in Demo Mode" button below to log in.');
+      } else if (err.code !== 'auth/popup-closed-by-user') {
         setError(err.message || 'Google Sign-In failed.');
       }
     } finally {
