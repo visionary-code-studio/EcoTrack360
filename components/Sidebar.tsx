@@ -128,7 +128,10 @@ export default function Sidebar({ ecoScore }: SidebarProps) {
             {!collapsed && <span className="text-sm">Home</span>}
           </Link>
           <button
-            onClick={() => signOut(auth).then(() => router.push('/'))}
+            onClick={() => {
+              localStorage.removeItem('eco_demo_user');
+              signOut(auth).then(() => router.push('/'));
+            }}
             className={`nav-link w-full text-left ${collapsed ? 'justify-center px-3' : ''}`}
             style={{ background: 'transparent', border: 'none' }}
             title={collapsed ? 'Sign Out' : undefined}

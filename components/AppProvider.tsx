@@ -67,10 +67,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Sync state from Firestore when user changes
   useEffect(() => {
+    const localUserStr = typeof window !== 'undefined' ? localStorage.getItem('eco_demo_user') : null;
+    let demoUser: any = null;
+    if (localUserStr) {
+      try {
+        demoUser = JSON.parse(localUserStr);
+      } catch {}
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser: User | null) => {
-      setUser(currentUser);
-      
       if (currentUser) {
+        setUser(currentUser);
         setUserLoading(true);
         try {
           // 1. Fetch user's carbon goal setting
@@ -142,8 +149,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         } finally {
           setUserLoading(false);
         }
+      } else if (demoUser) {
+        setUser(demoUser as User);
+        loadFromLocalStorage();
+        setUserLoading(false);
       } else {
         // Not logged in: fallback to local storage
+        setUser(null);
         loadFromLocalStorage();
         setUserLoading(false);
       }

@@ -108,6 +108,19 @@ export default function LoginPage() {
     }
   };
 
+  const handleDemoSignIn = () => {
+    const demoUser = {
+      uid: 'demo-user-123',
+      email: 'demo@ecotrack360.com',
+      displayName: 'Demo User',
+      isAnonymous: true
+    };
+    localStorage.setItem('eco_demo_user', JSON.stringify(demoUser));
+    if (typeof window !== 'undefined') {
+      window.location.href = '/dashboard';
+    }
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-surface-900 px-4 relative overflow-hidden animated-bg">
       {/* Decorative glow elements */}
@@ -213,6 +226,14 @@ export default function LoginPage() {
               {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
             </button>
           </form>
+
+          <button
+            type="button"
+            onClick={handleDemoSignIn}
+            className="w-full mt-3 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-dashed border-eco-500/30 hover:border-eco-500 hover:bg-eco-950/20 text-eco-400 font-semibold text-sm transition-all"
+          >
+            ⚡ Continue in Demo Mode (Bypass Auth)
+          </button>
 
           <div className="relative my-6 flex items-center justify-center">
             <div className="absolute inset-0 flex items-center">

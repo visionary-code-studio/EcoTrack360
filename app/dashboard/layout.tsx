@@ -67,7 +67,10 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
           <span className="text-white font-bold text-sm">EcoTrack360</span>
         </div>
         <button 
-          onClick={() => signOut(auth).then(() => router.push('/'))}
+          onClick={() => {
+            localStorage.removeItem('eco_demo_user');
+            signOut(auth).then(() => router.push('/'));
+          }}
           className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-all flex items-center gap-1 bg-transparent"
         >
           <span>🚪</span> Log Out
