@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
-const client = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+export const dynamic = 'force-dynamic';
 
 const SYSTEM_PROMPT = `You are EcoAI Coach, an expert sustainability advisor for the EcoTrack360 platform.
 You help users understand and reduce their personal carbon footprint.
@@ -29,6 +27,12 @@ When given the user's carbon data, reference it directly in your advice to make 
 
 export async function POST(req: NextRequest) {
   try {
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: 'Groq API key is not configured.' }, { status: 500 });
+    }
+    const client = new Groq({ apiKey });
+
     const { messages, context } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
